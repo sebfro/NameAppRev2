@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class LearningActivity extends AppCompatActivity {
@@ -18,12 +19,17 @@ public class LearningActivity extends AppCompatActivity {
     public int score = 0;
     String right_ans = "";
     public int num = 0;
-
+    private HashMap<Integer, imgAndAns> imgAndAnsHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learning);
+
+
+        imgAndAnsHashMap.put(1,new imgAndAns("sebastian", R.drawable.img1));
+        imgAndAnsHashMap.put(2,new imgAndAns("daniel", R.drawable.img2));
+        imgAndAnsHashMap.put(3,new imgAndAns("fedme", R.drawable.img3));
 
         setImage();
 
@@ -37,16 +43,9 @@ public class LearningActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.guessText);
         editText.setText("");
 
-        if (num == 1) {
-            image.setImageResource(R.drawable.img1);
-            right_ans = "sebastian";
-        } else if (num == 2) {
-            image.setImageResource(R.drawable.img2);
-            right_ans = "daniel";
-        } else {
-            image.setImageResource(R.drawable.img3);
-            right_ans = "fedme";
-        }
+        image.setImageResource(imgAndAnsHashMap.get(num).getImg());
+        right_ans = imgAndAnsHashMap.get(num).getAns();
+
     }
 
 
@@ -75,7 +74,7 @@ public class LearningActivity extends AppCompatActivity {
             updateScore(score);
 
         } else {
-            text = "Du gjettet feil. Prøv igjen!";
+            text = "The correct answer was: " + right_ans;
 
         }
 
@@ -86,5 +85,18 @@ public class LearningActivity extends AppCompatActivity {
     public void updateScore(int score) {
         TextView tw = (TextView)findViewById(R.id.score);
         tw.setText("Score: " + score);
+    }
+
+    public class imgAndAns{
+        private String ans;
+        private Integer img;
+        public imgAndAns(String ans, Integer img){
+            this.ans = ans;
+            this.img = img;
+        }
+        public int getImg(){return img;}
+        public String getAns(){return ans;}
+        public void setImg(Integer img){this.img = img;}
+        public void setAns(String ans){this.ans = ans;}
     }
 }
