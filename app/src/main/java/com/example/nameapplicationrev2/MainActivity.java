@@ -2,9 +2,11 @@ package com.example.nameapplicationrev2;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import android.content.Context;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -28,11 +31,33 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<T> drawableArrayList = new ArrayList<T>();
     private ArrayList<String> nameArrayList = new ArrayList<>();
 
+    //Preferences
+    private static final String MY_PREF = "PREF";
+    private static final String ADMIN_NAME = "";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkAdmin();
     }
+
+    public void checkAdmin() {
+        SharedPreferences settings = getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
+        String checkAdmin = settings.getString(ADMIN_NAME, "NULL");
+
+        if(checkAdmin.equals("NULL")) {
+
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "Velkommen " + checkAdmin, Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     public void playGame(View view){
         Intent i = getIntent();
