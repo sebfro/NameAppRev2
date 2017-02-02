@@ -19,7 +19,7 @@ public class LearningActivity extends AppCompatActivity {
     public int score = 0;
     String right_ans = "";
     public int num = 0;
-    private HashMap<Integer, imgAndAns> imgAndAnsHashMap = new HashMap<>();
+    public static HashMap<Integer, imgAndAns> imgAndAnsHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class LearningActivity extends AppCompatActivity {
         CharSequence text = "";
 
         if(answer.equals(right_ans)) {
-            text = "Du gjettet riktig!";
+            text = "You guessed correct";
             score++;
             updateScore(score);
 

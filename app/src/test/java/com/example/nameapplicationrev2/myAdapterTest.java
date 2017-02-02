@@ -35,18 +35,6 @@ public class myAdapterTest {
         list1.setImage_ID(R.drawable.img3);
         list1.setImage_title("Fed");
         mDataset.add(list1);
-
-
-    }
-
-    @Test
-    public void onCreateViewHolder() throws Exception {
-
-    }
-
-    @Test
-    public void onBindViewHolder() throws Exception {
-
     }
 
     @Test

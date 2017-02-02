@@ -32,16 +32,6 @@ public class listAdapterTest {
     }
 
     @Test
-    public void onCreateViewHolder() throws Exception {
-
-    }
-
-    @Test
-    public void onBindViewHolder() throws Exception {
-
-    }
-
-    @Test
     public void getItemCount() throws Exception {
         for (int i = itemCount; i > 0; i--){
             assertEquals(mDataset.size(), i);
