@@ -37,3 +37,5 @@ Oppdaget denne error-en da jeg testet appen på min personlige mobil Samsung s6 
 E/SpannableStringBuilder: SPAN_EXCLUSIVE_EXCLUSIVE spans cannot have a zero length
 
 Error skaper ingen problemer ved bruk av appen på s6, kaster bare error og ingenting mer.
+
+PS. Har brukt sourcetree til å laste prosjektet opp og ned uten å røre android studio sin innebygde github funksjon.
