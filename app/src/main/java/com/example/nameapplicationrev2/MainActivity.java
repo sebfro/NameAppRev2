@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> nameArrayList = new ArrayList<>();
 
     //Preferences
-    private static final String MY_PREF = "PREF";
-    private static final String ADMIN_NAME = "";
+    public static final String MY_PREF = "PREF";
+    public static final String ADMIN_NAME = "NAME";
 
 
 
@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkAdmin();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onStart();
 
         checkAdmin();
     }
