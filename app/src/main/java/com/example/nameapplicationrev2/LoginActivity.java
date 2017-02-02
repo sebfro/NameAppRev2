@@ -4,9 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,71 +15,77 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
 import android.content.Context;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.io.OutputStream;
 
-public class MainActivity extends AppCompatActivity {
+
+public class LoginActivity extends AppCompatActivity {
 
     private static  int RESULT_LOAD_IMG = 1;
     private static int REQUEST_EXTERNAL_STORAGE = 0;
     private final String DEBUG_TAG = "Error";
-    public static int images;
+
     private Uri imgUri;
-    public static ArrayList<T> drawableArrayList = new ArrayList<T>();
-    private ArrayList<String> nameArrayList = new ArrayList<>();
 
-    //Preferences
-    public static final String MY_PREF = "PREF";
-    public static final String ADMIN_NAME = "NAME";
-
+    //Til internal storage
+    private static final String FILENAME = "img_file";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        checkAdmin();
+        ImageView tempImg = (ImageView) findViewById(R.id.imageView);
+        Button btn =  (Button) findViewById(R.id.submitBtn);
+        //Gjemmer Submit før bildet er lagt til
+        btn.setVisibility(View.GONE);
+
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onStart();
 
-        checkAdmin();
-    }
+        public void submitName(View view) {
 
-    public void checkAdmin() {
-        SharedPreferences settings = getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
-        String checkAdmin = settings.getString(ADMIN_NAME, "NULL");
+            //Henter input fra bruker
+            EditText ed = (EditText) findViewById(R.id.nameText);
+            String name = ed.getText().toString().toLowerCase();
 
-        if(checkAdmin.equals("NULL")) {
+            //Sjekker at navn er fyllt ut
+            if(name.equals("NULL")) {
+                Toast.makeText(this, "Please enter a name" , Toast.LENGTH_LONG).show();
+            } else {
+                //Henter preferansefilen som er dafault
+                SharedPreferences settings = getSharedPreferences(MainActivity.MY_PREF, Context.MODE_PRIVATE);
+                //Henter editor for å kunne redigere pref filen
+                SharedPreferences.Editor editor = settings.edit();
 
-            Intent i = new Intent(this, LoginActivity.class);
-            startActivity(i);
-        } else {
-            Toast.makeText(this, "Velkommen " + checkAdmin, Toast.LENGTH_LONG).show();
+                //Putter string admin name i pref filen
+                editor.putString(MainActivity.ADMIN_NAME, name);
+                editor.apply();
+
+                //Starter ny intent for å sende tilbake til Menyen
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+            }
         }
-    }
 
-
-    public void playGame(View view){
-        Intent i = getIntent();
-        Intent intent = new Intent(this, LearningActivity.class);
-        startActivity(intent);
-    }
 
     public void addImage(View view){
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             Log.i(DEBUG_TAG, "Storage permission not granted. Requesting permissions.");
             String[] tmp = { Manifest.permission.READ_EXTERNAL_STORAGE };
-            ActivityCompat.requestPermissions(MainActivity.this, tmp , REQUEST_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(LoginActivity.this, tmp , REQUEST_EXTERNAL_STORAGE);
 
 
 
@@ -119,64 +126,27 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
                 imgUri = data.getData();
                 try{
+                    //Henter bildet
                     InputStream inputStream = getContentResolver().openInputStream(imgUri);
-                    Drawable img = Drawable.createFromStream(inputStream, imgUri.toString());
-                    T tmp = new T(img, "hei");
-                    drawableArrayList.add(tmp);
-                    Intent i = new Intent(this, EnterNameActivity.class);
-                    startActivity(i);
+                    //Gjer bildet om til Bitmap
+                    Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+
+                    //Åpner stream
+                    FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+                    //Skriver Bitmap til Stream
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+                    //Synligjør Submit kanppen
+                    Button btn =  (Button) findViewById(R.id.submitBtn);
+                    btn.setVisibility(View.VISIBLE);
+
+
+
                 } catch(FileNotFoundException e){
                     Log.i(DEBUG_TAG, "File not found.");
                 }
 
-                /*uriArrayList.add(imgUri);
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imgUri);
-
-                }catch(IOException e){
-                    Toast.makeText(getApplicationContext(), "Something happend", Toast.LENGTH_LONG).show();
-                }
-                */
             }
         }
     }
-
-
-    public void showList(View view){
-        Intent i = new Intent(this, NameListActivity.class);
-        startActivity(i);
-    }
-
-    public void quitApp(View view){
-
-    }
-
-    public void openGallery(View view){
-        Intent i = new Intent(this, GalleryActivity.class);
-
-        startActivity(i);
-    }
-
-    public class T {
-        private Drawable d;
-        private String name;
-        public T (Drawable d, String name){
-            this.d = d;
-            this.name = name;
-        }
-        public Drawable getD(){
-            return d;
-        }
-        public String getName(){
-            return name;
-        }
-        public void setName(String name){
-            this.name = name;
-        }
-    }
-
-    public static void addImage(){
-        images++;
-    }
-
 }

@@ -3,4 +3,9 @@
     <string name="main_menu">Back to Menu</string>
     <string name="title_activity_name_list">NameListActivity</string>
     <string name="title_activity_add_image">AddImageActivity</string>
+
+    //Login
+    <string name="login_caption">Please add your name and photo:</string>
+    <string name="login_hint">Enter your name</string>
+    <string name="login_submit_btn">Submit</string>
 </resources>
