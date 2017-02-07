@@ -1,10 +1,16 @@
 package com.example.nameapplicationrev2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.test.annotation.UiThreadTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import org.junit.Before;
@@ -56,11 +62,44 @@ public class menuTest  {
 
     }
 
+
+
     @UiThreadTest
-    public void addImg(){
+    public void startNameList(){
+        btnList[0].performClick();
+        RecyclerView rV = (RecyclerView) mActivity.findViewById(R.id.list_recycler_view);
+        ImageView iV = (ImageView) mActivity.findViewById(R.id.img);
+        TextView tV = (TextView) mActivity.findViewById(R.id.name);
+        assertEquals((rV != null), true);
+        assertEquals((tV != null), true);
+        assertEquals((iV != null), true);
+
         btnList[1].performClick();
+        EditText eT = (EditText) mActivity.findViewById(R.id.userInput);
+        Button btn = (Button) mActivity.findViewById(R.id.button2);
+        assertEquals((btn != null), true);
+        assertEquals((eT != null), true);
 
 
+        btnList[2].performClick();
+        btn = (Button) mActivity.findViewById(R.id.guessBtn);
+        Button btn2 = (Button) mActivity.findViewById(R.id.menuBtn);
+        tV = (TextView) mActivity.findViewById(R.id.score);
+        assertEquals((btn != null), true);
+        assertEquals((btn2 != null), true);
+        assertEquals((tV != null), true);
+
+        btnList[3].performClick();
+        rV = (RecyclerView) mActivity.findViewById(R.id.list_recycler_view);
+        iV = (ImageView) mActivity.findViewById(R.id.images);
+        assertEquals((rV != null), true);
+        assertEquals((iV != null), true);
+    }
+
+    @UiThreadTest
+    public void startLearningMode(){
+        btnList[2].performClick();
+        Button btn = (Button) mActivity.findViewById(R.id.guessBtn);
     }
 
 
